@@ -32,9 +32,7 @@ jobs:
         run: sed -i -e "s/cargo build --release$/cargo build --release --no-default-features --features \"analytics mini-dashboard japanese\"/g" ./Dockerfile
 
       - name: Get Version
-        run: |
-          VERSION=`grep version ./Cargo.toml | awk '{print $3}' | sed -e 's/"//g'` \
-          echo VERSION="${VERSION}" >> $GITHUB_ENV
+        run: echo VERSION="`grep version ./Cargo.toml | awk '{print $3}' | sed -e 's/"//g'`" >> $GITHUB_ENV
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
