@@ -1,6 +1,8 @@
 name: Push Docker image to the GitHub Container Registry (GHCR)
 
 on:
+  schedule:
+    - cron: '0 13 * * 2'
   workflow_dispatch:
   push:
     branches:
