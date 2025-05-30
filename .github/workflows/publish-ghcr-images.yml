@@ -64,7 +64,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Get repository name
-        run: echo "REPO_NAME=${{ github.repository }}" | awk -F/ '{ print $2 }' >> $GITHUB_ENV
+        run: echo REPO_NAME="echo ${{ github.repository }} | awk -F/ '{ print $2 }'" >> $GITHUB_ENV
 
       - name: Get untagged images
         id: get_images
