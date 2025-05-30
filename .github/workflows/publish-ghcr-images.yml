@@ -63,10 +63,13 @@ jobs:
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
+      - name: Get repository name
+        run: echo "REPO_NAME=${{ github.repository }}" | awk -F/ '{ print $2 }' >> $GITHUB_ENV
+
       - name: Get untagged images
         id: get_images
         run: |
-          untagged_images=$(gh api -X GET /user/packages/container/${{ env.IMAGE_NAME }}/versions --paginate --jq '.[] | select(.metadata.container.tags | length == 0) | .id')
+          untagged_images=$(gh api -X GET /user/packages/container/${{ env.REPO_NAME }}/versions --paginate --jq '.[] | select(.metadata.container.tags | length == 0) | .id')
           echo "untagged_images=${untagged_images}" >> $GITHUB_ENV
   
       - name: Delete untagged images
@@ -74,5 +77,5 @@ jobs:
         run: |
           for image_id in ${untagged_images}; do
             echo "Deleting image with ID: ${image_id}"
-            gh api -X DELETE /user/packages/container/${{ env.IMAGE_NAME }}/versions/${image_id}
+            gh api -X DELETE /user/packages/container/${{ env.REPO_NAME }}/versions/${image_id}
           done
